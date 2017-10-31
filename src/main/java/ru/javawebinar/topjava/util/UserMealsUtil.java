@@ -47,8 +47,7 @@ public class UserMealsUtil {
                         list.add(new UserMealWithExceed(
                                 mealExceed.getDateTime(), mealExceed.getDescription(),
                                 mealExceed.getCalories(), exceed));
-                        System.out.println("result = " + mealExceed + " " + exceed);
-                    }
+                        }
                 mealPerDay = new ArrayList<>();
                 mealPerDay.add(meal);
                 summ = meal.getCalories();
