@@ -40,7 +40,6 @@ public class UserMealsUtil {
                     forEach(m -> result.add(
                             new UserMealWithExceed(m.getDateTime(), m.getDescription(), m.getCalories(), exceed)));
             });
-        result.forEach(System.out::println);
         return result;
     }
 
