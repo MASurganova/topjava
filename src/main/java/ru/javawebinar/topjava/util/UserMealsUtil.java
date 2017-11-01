@@ -8,6 +8,8 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.Month;
 import java.util.*;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 /**
  * GKislin
@@ -29,34 +31,17 @@ public class UserMealsUtil {
     }
 
     public static List<UserMealWithExceed>  getFilteredWithExceeded(List<UserMeal> mealList, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
-        List<UserMealWithExceed> list = new ArrayList<>();
-        List<UserMeal> sortedMealList = new ArrayList<>(mealList);
-        sortedMealList.sort(Comparator.comparing(UserMeal::getDateTime));
-        LocalDate prevDate = sortedMealList.get(0).getDateTime().toLocalDate();
-        List<UserMeal> mealPerDay = new ArrayList<>();
-        for(UserMeal meal : sortedMealList) {
-            LocalDate date = meal.getDateTime().toLocalDate();
-            if(prevDate.equals(date)) {
-                mealPerDay.add(meal);
-            } else {
-                boolean exceed =
-                        mealPerDay.stream().map(UserMeal::getCalories).mapToInt(Integer::valueOf).sum() >
-                                caloriesPerDay;
-                mealPerDay.stream().
-                        filter(m -> TimeUtil.isBetween(m.getDateTime().toLocalTime(), startTime, endTime)).
-                        forEach(m -> list.add(new UserMealWithExceed(m.getDateTime(), m.getDescription(), m.getCalories(), exceed)));
-                mealPerDay = new ArrayList<>();
-                mealPerDay.add(meal);
-                prevDate = date;
-            }
-        }
-        boolean exceed = mealPerDay.stream().map(UserMeal::getCalories).mapToInt(Integer::valueOf).sum() >
-                caloriesPerDay;
-        mealPerDay.stream().
-                filter(m -> TimeUtil.isBetween(m.getDateTime().toLocalTime(), startTime, endTime)).
-                forEach(m -> list.add(new UserMealWithExceed(m.getDateTime(), m.getDescription(), m.getCalories(), exceed)));
-        list.forEach(System.out :: println);
-        return list;
+        List<UserMealWithExceed> result = new ArrayList<>();
+        Map<LocalDate, List<UserMeal>> map = mealList.stream().
+                collect(Collectors.groupingBy(m -> m.getDateTime().toLocalDate()));
+        map.forEach((k,v) -> {
+            boolean exceed = v.stream().mapToInt(UserMeal::getCalories).sum() > caloriesPerDay;
+            v.stream().filter(m -> TimeUtil.isBetween(m.getDateTime().toLocalTime(), startTime, endTime)).
+                    forEach(m -> result.add(
+                            new UserMealWithExceed(m.getDateTime(), m.getDescription(), m.getCalories(), exceed)));
+            });
+        result.forEach(System.out::println);
+        return result;
     }
 
 }
