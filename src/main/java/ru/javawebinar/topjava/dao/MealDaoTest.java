@@ -1,5 +1,6 @@
 package ru.javawebinar.topjava.dao;
 
+import org.slf4j.Logger;
 import ru.javawebinar.topjava.model.Meal;
 
 import java.time.LocalDateTime;
@@ -13,9 +14,12 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 public class MealDaoTest implements MealDao {
     private Map<Integer,Meal> meals = new ConcurrentHashMap<>();
     private AtomicInteger count = new AtomicInteger(0);
+    private static final Logger log = getLogger(MealDaoTest.class);
 
     {Arrays.asList(
             new Meal(LocalDateTime.of(2015, Month.MAY, 30, 10, 0), "Завтрак", 500),
@@ -39,12 +43,14 @@ public class MealDaoTest implements MealDao {
 
     @Override
     public void update(Meal meal) {
-        add(meal);
+        meals.put(meal.getId(), meal);
     }
 
     @Override
     public List<Meal> getList() {
-        return meals.values().stream().collect(Collectors.toList());
+        List<Meal> list = meals.values().stream().collect(Collectors.toList());
+        log.debug("get list from dao:" + list);
+        return list;
     }
 
     @Override
