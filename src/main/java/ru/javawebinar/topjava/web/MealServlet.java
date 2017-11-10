@@ -44,7 +44,7 @@ public class MealServlet extends HttpServlet {
             dao.delete(id);
             log.debug("delete meal id = " + id);
             forward = LIST_USER;
-            request.setAttribute("meals", MealsUtil.getListWithExceeded(dao.getList(), 2000));
+            request.setAttribute("meals", MealsUtil.getListWithExceeded(dao.getList(), MealsUtil.DEFAULT_CALORIES_PER_DAY));
         } else if (action.equalsIgnoreCase("edit")){
             forward = INSERT_OR_EDIT;
             int id = Integer.parseInt(request.getParameter("id"));
@@ -54,7 +54,7 @@ public class MealServlet extends HttpServlet {
         } else if (action.equalsIgnoreCase("list")){
             forward = LIST_USER;
             log.debug("show meals list");
-            request.setAttribute("meals", MealsUtil.getListWithExceeded(dao.getList(), 2000));
+            request.setAttribute("meals", MealsUtil.getListWithExceeded(dao.getList(), MealsUtil.DEFAULT_CALORIES_PER_DAY));
         } else {
             log.debug("forward to add page");
             forward = INSERT_OR_EDIT;

@@ -7,52 +7,48 @@ import java.time.Month;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 public class MealDaoTest implements MealDao {
-    private List<Meal> meals = new CopyOnWriteArrayList<>();
+    private Map<Integer,Meal> meals = new ConcurrentHashMap<>();
     private AtomicInteger count = new AtomicInteger(0);
 
-    public MealDaoTest() {
-        meals.addAll(Arrays.asList(
-                new Meal(LocalDateTime.of(2015, Month.MAY, 30, 10, 0), "Завтрак", 500, count.incrementAndGet()),
-                new Meal(LocalDateTime.of(2015, Month.MAY, 30, 13, 0), "Обед", 1000, count.incrementAndGet()),
-                new Meal(LocalDateTime.of(2015, Month.MAY, 30, 20, 0), "Ужин", 500, count.incrementAndGet()),
-                new Meal(LocalDateTime.of(2015, Month.MAY, 31, 10, 0), "Завтрак", 1000, count.incrementAndGet()),
-                new Meal(LocalDateTime.of(2015, Month.MAY, 31, 13, 0), "Обед", 500, count.incrementAndGet()),
-                new Meal(LocalDateTime.of(2015, Month.MAY, 31, 20, 0), "Ужин", 510, count.incrementAndGet())
-        ));
-    }
+    {Arrays.asList(
+            new Meal(LocalDateTime.of(2015, Month.MAY, 30, 10, 0), "Завтрак", 500),
+            new Meal(LocalDateTime.of(2015, Month.MAY, 30, 13, 0), "Обед", 1000),
+            new Meal(LocalDateTime.of(2015, Month.MAY, 30, 20, 0), "Ужин", 500),
+            new Meal(LocalDateTime.of(2015, Month.MAY, 31, 10, 0), "Завтрак", 1000),
+            new Meal(LocalDateTime.of(2015, Month.MAY, 31, 13, 0), "Обед", 500),
+            new Meal(LocalDateTime.of(2015, Month.MAY, 31, 20, 0), "Ужин", 510)
+    ).forEach(this::add);}
 
     @Override
     public void add(Meal meal) {
         meal.setId(count.incrementAndGet());
-        meals.add(meal);
+        meals.put(meal.getId(), meal);
     }
 
     @Override
     public void delete(int id) {
-        List<Meal> copy = new ArrayList<>(meals);
-        for(Meal meal : copy)
-            if (meal.getId() == id) meals.remove(meal);
+        meals.remove(id);
     }
 
     @Override
     public void update(Meal meal) {
-        meals.remove(meals.stream().
-                filter(m -> m.getId() == meal.getId()).collect(Collectors.toList()).get(0));
-        meals.add(meal);
+        add(meal);
     }
 
     @Override
     public List<Meal> getList() {
-        return meals;
+        return meals.values().stream().collect(Collectors.toList());
     }
 
     @Override
     public Meal getByID(int id) {
-        return meals.stream().filter(m -> m.getId() == id).collect(Collectors.toList()).get(0);
+        return meals.get(id);
     }
 }
