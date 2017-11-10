@@ -19,16 +19,17 @@ import static org.slf4j.LoggerFactory.getLogger;
 public class MealDaoTest implements MealDao {
     private Map<Integer,Meal> meals = new ConcurrentHashMap<>();
     private AtomicInteger count = new AtomicInteger(0);
-    private static final Logger log = getLogger(MealDaoTest.class);
 
-    {Arrays.asList(
-            new Meal(LocalDateTime.of(2015, Month.MAY, 30, 10, 0), "Завтрак", 500),
-            new Meal(LocalDateTime.of(2015, Month.MAY, 30, 13, 0), "Обед", 1000),
-            new Meal(LocalDateTime.of(2015, Month.MAY, 30, 20, 0), "Ужин", 500),
-            new Meal(LocalDateTime.of(2015, Month.MAY, 31, 10, 0), "Завтрак", 1000),
-            new Meal(LocalDateTime.of(2015, Month.MAY, 31, 13, 0), "Обед", 500),
-            new Meal(LocalDateTime.of(2015, Month.MAY, 31, 20, 0), "Ужин", 510)
-    ).forEach(this::add);}
+    public MealDaoTest() {
+        Arrays.asList(
+                new Meal(LocalDateTime.of(2015, Month.MAY, 30, 10, 0), "Завтрак", 500),
+                new Meal(LocalDateTime.of(2015, Month.MAY, 30, 13, 0), "Обед", 1000),
+                new Meal(LocalDateTime.of(2015, Month.MAY, 30, 20, 0), "Ужин", 500),
+                new Meal(LocalDateTime.of(2015, Month.MAY, 31, 10, 0), "Завтрак", 1000),
+                new Meal(LocalDateTime.of(2015, Month.MAY, 31, 13, 0), "Обед", 500),
+                new Meal(LocalDateTime.of(2015, Month.MAY, 31, 20, 0), "Ужин", 510)
+        ).forEach(this::add);
+    }
 
     @Override
     public void add(Meal meal) {
@@ -48,9 +49,7 @@ public class MealDaoTest implements MealDao {
 
     @Override
     public List<Meal> getList() {
-        List<Meal> list = meals.values().stream().collect(Collectors.toList());
-        log.debug("get list from dao:" + list);
-        return list;
+        return meals.values().stream().collect(Collectors.toList());
     }
 
     @Override

@@ -7,6 +7,15 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Show All Meals</title>
+    <style>
+        .normal{
+            color: green;
+        }
+        .exeeded{
+            color: red;
+        }
+    </style>
+
 </head>
 <body>
 <table border=1>
@@ -23,7 +32,7 @@
     <tbody>
     <c:forEach items="${meals}" var="meal">
         <fmt:parseDate value="${meal.dateTime}" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime" type="both" />
-        <tr bgcolor="${meal.exceed ? 'red' : 'green'}">
+        <tr class="${meal.exceed ? 'exeeded' : 'normal'}">
             <td><c:out value="${meal.id}" /></td>
             <td><fmt:formatDate pattern="dd.MM.yyyy" value="${parsedDateTime}" /></td>
             <td><fmt:formatDate pattern="HH:mm" value="${parsedDateTime}" /></td>

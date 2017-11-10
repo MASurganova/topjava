@@ -27,8 +27,8 @@
                    value="<c:out value="${meal.description}" />" /> <br />
     Calories : <input type="text" name="calories"
                          value="<c:out value="${meal.calories}" />" /> <br />
-    <input
-        type="submit" value="Submit" />
+    <button type="submit">Save</button>
+    <button onclick="window.history.back()" type="button">Cancel</button>
 </form>
 </body>
 </html>

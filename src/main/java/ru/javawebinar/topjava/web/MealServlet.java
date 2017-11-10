@@ -23,8 +23,6 @@ import static org.slf4j.LoggerFactory.getLogger;
 public class MealServlet extends HttpServlet {
     private static final Logger log = getLogger(MealServlet.class);
 
-    private static String INSERT_OR_EDIT = "meal.jsp";
-    private static String LIST_USER = "meals.jsp";
     private MealDao dao;
     private DateTimeFormatter df = DateTimeFormatter.ofPattern("dd.MM.yyyy");
     private DateTimeFormatter tf = DateTimeFormatter.ofPattern("HH:mm");
@@ -36,31 +34,33 @@ public class MealServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String forward="";
         String action = request.getParameter("action");
-
-        if (action.equalsIgnoreCase("delete")){
-            int id = Integer.parseInt(request.getParameter("id"));
-            dao.delete(id);
-            log.debug("delete meal id = " + id);
-            forward = LIST_USER;
-            request.setAttribute("meals", MealsUtil.getListWithExceeded(dao.getList(), MealsUtil.DEFAULT_CALORIES_PER_DAY));
-        } else if (action.equalsIgnoreCase("edit")){
-            forward = INSERT_OR_EDIT;
-            int id = Integer.parseInt(request.getParameter("id"));
-            Meal meal = dao.getByID(id);
-            log.debug("forward to edit page, meal - " + meal);
-            request.setAttribute("meal", meal);
-        } else if (action.equalsIgnoreCase("list")){
-            forward = LIST_USER;
-            log.debug("show meals list");
-            request.setAttribute("meals", MealsUtil.getListWithExceeded(dao.getList(), MealsUtil.DEFAULT_CALORIES_PER_DAY));
-        } else {
-            log.debug("forward to add page");
-            forward = INSERT_OR_EDIT;
+        switch (action == null ? "list" : action) {
+            case "delete": {
+                int id = Integer.parseInt(request.getParameter("id"));
+                dao.delete(id);
+                log.debug("delete meal id = " + id);
+                request.setAttribute("meals", MealsUtil.getListWithExceeded(dao.getList(), MealsUtil.DEFAULT_CALORIES_PER_DAY));
+                request.getRequestDispatcher("meals.jsp").forward(request, response);
+            } break;
+            case "edit":
+            case "insert": {
+                String id = request.getParameter("id");
+                Meal meal = id == null ?
+                        new Meal(LocalDateTime.now(), "", 1000) :
+                        dao.getByID(Integer.parseInt(id));
+                log.debug("forward to edit page, meal - " + meal);
+                request.setAttribute("meal", meal);
+                request.getRequestDispatcher("/meal.jsp").forward(request, response);
+            }
+            case "all":
+            default: {
+                log.debug("show meals list");
+                request.setAttribute("meals",
+                        MealsUtil.getListWithExceeded(dao.getList(), MealsUtil.DEFAULT_CALORIES_PER_DAY));
+                request.getRequestDispatcher("/meals.jsp").forward(request, response);
+            }
         }
-        RequestDispatcher view = request.getRequestDispatcher(forward);
-        view.forward(request, response);
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -88,8 +88,7 @@ public class MealServlet extends HttpServlet {
             dao.update(meal);
             log.debug("edit meal, new meal: " + meal);
         }
-        RequestDispatcher view = request.getRequestDispatcher(LIST_USER);
         request.setAttribute("meals", MealsUtil.getListWithExceeded(dao.getList(), 2000));
-        view.forward(request, response);
+        request.getRequestDispatcher("/meals.jsp").forward(request, response);
     }
 }
