@@ -2,15 +2,14 @@ package ru.javawebinar.topjava.util;
 
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.model.MealWithExceed;
+import ru.javawebinar.topjava.model.Role;
+import ru.javawebinar.topjava.model.User;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.Month;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
@@ -26,6 +25,12 @@ public class MealsUtil {
     );
 
     public static final int DEFAULT_CALORIES_PER_DAY = 2000;
+
+    public static final List<User> USERS = Arrays.asList(
+            new User(null, "marina", "m@mail.ru", "12345", 2000, true, EnumSet.of(Role.ROLE_USER)),
+            new User(null, "danil", "d@mail.ru", "12345", 2500, true, EnumSet.of(Role.ROLE_USER)),
+            new User(null, "admin", "admin@mail.ru", "12345", Role.ROLE_USER, Role.ROLE_ADMIN)
+    );
 
     public static List<MealWithExceed> getWithExceeded(Collection<Meal> meals, int caloriesPerDay) {
         return getFilteredWithExceeded(meals, LocalTime.MIN, LocalTime.MAX, caloriesPerDay);
