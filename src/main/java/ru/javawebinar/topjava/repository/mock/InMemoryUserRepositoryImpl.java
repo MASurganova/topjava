@@ -21,9 +21,9 @@ public class InMemoryUserRepositoryImpl implements UserRepository {
     private Map<Integer, User> repository = new ConcurrentHashMap<>();
     private AtomicInteger counter = new AtomicInteger(0);
 
-    {
-        MealsUtil.USERS.forEach(this::save);
-    }
+//    {
+//        MealsUtil.USERS.forEach(this::save);
+//    }
 
     @Override
     public boolean delete(int id) {

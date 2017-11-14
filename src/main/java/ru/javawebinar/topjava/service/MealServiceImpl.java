@@ -52,8 +52,4 @@ public class MealServiceImpl implements MealService {
         return repository.getByDate(userId, start, end);
     }
 
-    @Override
-    public List<Meal> getByTime(int userId, LocalTime start, LocalTime end) {
-        return repository.getByTime(userId, start, end);
-    }
 }
