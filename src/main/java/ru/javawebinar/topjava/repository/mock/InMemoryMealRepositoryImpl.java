@@ -32,7 +32,7 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
 
     public InMemoryMealRepositoryImpl (UserRepository userRepository){
         this.userRepository = userRepository;
-//        MealsUtil.MEALS.forEach(m -> save(m, 1));
+        MealsUtil.MEALS.forEach(m -> save(m, AuthorizedUser.id()));
     }
 
     @Override

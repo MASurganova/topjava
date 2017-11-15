@@ -35,7 +35,6 @@ public class MealServlet extends HttpServlet {
         super.init(config);
         try (ConfigurableApplicationContext appCtx = new ClassPathXmlApplicationContext("spring/spring-app.xml")) {
             mealRestController = appCtx.getBean(MealRestController.class);
-            MealsUtil.MEALS.forEach(mealRestController::create);
          }
     }
 
