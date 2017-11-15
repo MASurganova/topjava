@@ -55,15 +55,20 @@ public class MealRestController {
         service.update(meal, restController.get().getId());
     }
 
-    public List<MealWithExceed> getByDate(LocalDate start, LocalDate end) {
+    private List<MealWithExceed> getByDate(LocalDate start, LocalDate end) {
         log.info("getByDate {}", start + " " + end);
         return getFilteredWithExceeded(service.getByDate(restController.get().getId(), start, end),
                 LocalTime.MIN, LocalTime.MAX, restController.get().getCaloriesPerDay());
     }
 
-    public List<MealWithExceed> getByTime(LocalTime start, LocalTime end) {
-        log.info("getByTime {}", start + " " + end);
-        return getFilteredWithExceeded(service.getAll(restController.get().getId()), start, end,
-                restController.get().getCaloriesPerDay());
+    public List<MealWithExceed> getByDateTime(LocalDate startDate, LocalDate endDate,
+                                              LocalTime startTime, LocalTime endTime) {
+        log.info("getByDateTime {}", startDate + " " + endDate + " " + startTime + " " + endTime);
+        startDate = startDate == null ? LocalDate.MIN : startDate;
+        endDate = endDate == null ? LocalDate.MAX: endDate;
+        startTime = startTime == null ? LocalTime.MIN: startTime;
+        endTime = endTime == null ? LocalTime.MAX: endTime;
+        return getFilteredWithExceeded(service.getByDate(restController.get().getId(), startDate, endDate),
+                startTime, endTime, restController.get().getCaloriesPerDay());
     }
 }

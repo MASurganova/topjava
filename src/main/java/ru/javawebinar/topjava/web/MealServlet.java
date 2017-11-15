@@ -17,8 +17,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.text.ParseException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
+import java.util.Date;
 import java.util.Objects;
 
 public class MealServlet extends HttpServlet {
@@ -31,6 +35,7 @@ public class MealServlet extends HttpServlet {
         super.init(config);
         try (ConfigurableApplicationContext appCtx = new ClassPathXmlApplicationContext("spring/spring-app.xml")) {
             mealRestController = appCtx.getBean(MealRestController.class);
+            MealsUtil.MEALS.forEach(mealRestController::create);
          }
     }
 
@@ -69,6 +74,16 @@ public class MealServlet extends HttpServlet {
                 request.setAttribute("meal", meal);
                 request.getRequestDispatcher("/mealForm.jsp").forward(request, response);
                 break;
+            case "filter":
+                LocalDate dateStart = getDate(request, "dateStart");
+                LocalDate dateEnd = getDate(request, "dateEnd");
+                LocalTime timeStart = getTime(request, "timeStart");
+                LocalTime timeEnd = getTime(request, "timeEnd");
+                log.info("getByDateTime{}", timeEnd, timeStart, dateStart, dateEnd);
+                request.setAttribute("meals",
+                                mealRestController.getByDateTime(dateStart, dateEnd, timeStart, timeEnd));
+                request.getRequestDispatcher("/meals.jsp").forward(request, response);
+                break;
             case "all":
             default:
                 log.info("getAll");
@@ -83,4 +98,22 @@ public class MealServlet extends HttpServlet {
         String paramId = Objects.requireNonNull(request.getParameter("id"));
         return Integer.valueOf(paramId);
     }
+
+    private LocalDate getDate(HttpServletRequest request, String dateParametr) {
+        String dateString = request.getParameter(dateParametr);
+        if (dateParametr.isEmpty())  return null;
+        try {
+            return LocalDate.parse(dateString);
+        } catch (Exception e) { log.error(e.getMessage()); }
+        return null;
+    }
+
+    private LocalTime getTime(HttpServletRequest request, String timeParametr) {
+        String timeString = request.getParameter(timeParametr);
+        if (timeParametr.isEmpty())  return null;
+        try {
+            return LocalTime.parse(timeString);
+        } catch (Exception e) { log.error(e.getMessage()); }
+            return null;
+        }
 }

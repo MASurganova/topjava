@@ -20,6 +20,28 @@
 <section>
     <h3><a href="index.html">Home</a></h3>
     <h2>Meals</h2>
+    <form method="get">
+        <input type="hidden" name="action" value="filter">
+        <dl>
+            <dt>Date start:</dt>
+            <dd><input type="date" value="${dateStart}" name="dateStart"></dd>
+        </dl>
+        <dl>
+            <dt>Date end:</dt>
+            <dd><input type="date" value="${dateEnd}" name="dateEnd"></dd>
+        </dl>
+        <dl>
+            <dt>Time start:</dt>
+            <dd><input type="time" value="${timeStart}" name="timeStart"></dd>
+        </dl>
+        <dl>
+            <dt>Time end:</dt>
+            <dd><input type="time" value="${timeEnd}" name="timeEnd"></dd>
+        </dl>
+        <button type="submit">Filter</button>
+        <button type="button" onclick=window.history.back()>Cancel</button>
+    </form>
+
     <a href="meals?action=create">Add Meal</a>
     <hr/>
     <table border="1" cellpadding="8" cellspacing="0">
