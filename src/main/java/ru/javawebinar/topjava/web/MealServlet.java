@@ -30,12 +30,13 @@ public class MealServlet extends HttpServlet {
 
     private MealRestController mealRestController;
 
+    private ConfigurableApplicationContext appCtx;
+
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        try (ConfigurableApplicationContext appCtx = new ClassPathXmlApplicationContext("spring/spring-app.xml")) {
-            mealRestController = appCtx.getBean(MealRestController.class);
-         }
+        appCtx = new ClassPathXmlApplicationContext("spring/spring-app.xml");
+        mealRestController = appCtx.getBean(MealRestController.class);
     }
 
     @Override
@@ -114,5 +115,11 @@ public class MealServlet extends HttpServlet {
             return LocalTime.parse(timeString);
         } catch (Exception e) { log.error(e.getMessage()); }
             return null;
-        }
+    }
+
+    @Override
+    public void destroy() {
+        super.destroy();
+        appCtx.close();
+    }
 }

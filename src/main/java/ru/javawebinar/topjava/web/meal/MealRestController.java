@@ -8,6 +8,7 @@ import ru.javawebinar.topjava.AuthorizedUser;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.service.MealService;
 import ru.javawebinar.topjava.to.MealWithExceed;
+import ru.javawebinar.topjava.util.exception.NotFoundException;
 import ru.javawebinar.topjava.web.user.ProfileRestController;
 
 import java.time.LocalDate;
@@ -28,8 +29,7 @@ public class MealRestController {
 
     public List<MealWithExceed> getAll() {
         log.info("getAll");
-        return getFilteredWithExceeded(service.getAll(AuthorizedUser.id()),
-                LocalTime.MIN, LocalTime.MAX, AuthorizedUser.getCaloriesPerDay());
+        return getWithExceeded(service.getAll(AuthorizedUser.id()), AuthorizedUser.getCaloriesPerDay());
     }
     public Meal get(int id) {
         log.info("get {}", id);
@@ -42,21 +42,15 @@ public class MealRestController {
         return service.create(meal, AuthorizedUser.id());
     }
 
-    public void delete(int id) {
+    public void delete(int id) throws NotFoundException{
         log.info("delete {}", id);
         service.delete(id, AuthorizedUser.id());
     }
 
-    public void update(Meal meal, int id) {
+    public void update(Meal meal, int id) throws NotFoundException{
         log.info("update {} with id={}", meal, id);
         assureIdConsistent(meal, id);
         service.update(meal, AuthorizedUser.id());
-    }
-
-    private List<MealWithExceed> getByDate(LocalDate start, LocalDate end) {
-        log.info("getByDate {}", start + " " + end);
-        return getFilteredWithExceeded(service.getByDate(AuthorizedUser.id(), start, end),
-                LocalTime.MIN, LocalTime.MAX, AuthorizedUser.getCaloriesPerDay());
     }
 
     public List<MealWithExceed> getByDateTime(LocalDate startDate, LocalDate endDate,
