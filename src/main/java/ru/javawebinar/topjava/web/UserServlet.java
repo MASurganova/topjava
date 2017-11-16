@@ -4,8 +4,6 @@ import org.slf4j.Logger;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import ru.javawebinar.topjava.AuthorizedUser;
-import ru.javawebinar.topjava.util.MealsUtil;
-import ru.javawebinar.topjava.web.meal.MealRestController;
 import ru.javawebinar.topjava.web.user.ProfileRestController;
 
 import javax.servlet.ServletConfig;
@@ -33,9 +31,14 @@ public class UserServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        log.debug("forward to users");
+        request.getRequestDispatcher("/users.jsp").forward(request, response);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int userId = Integer.parseInt(request.getParameter("userId"));
         AuthorizedUser.setId(userId);
-        AuthorizedUser.setCaloriesPerDay(profileRestController.get().getCaloriesPerDay());
         log.debug("select user id = ", userId);
         response.sendRedirect("meals");
     }
