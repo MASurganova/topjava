@@ -13,13 +13,14 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 import static ru.javawebinar.topjava.UserTestData.ADMIN;
+import static ru.javawebinar.topjava.UserTestData.ADMIN_ID;
 import static ru.javawebinar.topjava.UserTestData.USER;
 
 @Repository
 public class InMemoryUserRepositoryImpl implements UserRepository {
 
     private Map<Integer, User> repository = new ConcurrentHashMap<>();
-    private AtomicInteger counter = new AtomicInteger(100);
+    private AtomicInteger counter = new AtomicInteger(ADMIN_ID);
 
     public void init() {
         repository.clear();
