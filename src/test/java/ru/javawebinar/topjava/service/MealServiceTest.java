@@ -41,7 +41,6 @@ public class MealServiceTest {
     }
 
     @Autowired
-    @Qualifier("jdbcMealService")
     private MealService service;
     private int firstId;
     private int countUserMeals;

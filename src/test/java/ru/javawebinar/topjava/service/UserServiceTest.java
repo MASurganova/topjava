@@ -34,7 +34,6 @@ public class UserServiceTest {
     }
 
     @Autowired
-    @Qualifier("jdbcUserService")
     private UserService service;
 
     @Test
