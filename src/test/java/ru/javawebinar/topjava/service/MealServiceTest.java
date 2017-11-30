@@ -4,6 +4,7 @@ import org.junit.AfterClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.junit.rules.Stopwatch;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 import org.junit.runner.RunWith;
@@ -18,9 +19,11 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
+import java.sql.Time;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import static ru.javawebinar.topjava.MealTestData.*;
 import static ru.javawebinar.topjava.MealTestData.assertMatch;
@@ -47,29 +50,27 @@ public class MealServiceTest {
     private static StringBuilder testMessage = new StringBuilder();
 
     @Rule
-    public TestWatcher watcher = new TestWatcher() {
-
-        private long start;
-
+    public Stopwatch stopwatch = new Stopwatch() {
+        /**
+         * Invoked when a test method finishes (whether passing or failing)
+         *
+         * @param nanos
+         * @param description
+         */
         @Override
-        protected void starting(Description description) {
-            start = new Date().getTime();
-        }
-
-        @Override
-        protected void finished(Description description) {
-            long time = new Date().getTime() - start;
-            log.info("Test {} time of completion - {}", description.getMethodName(), time);
-            testMessage.append(String.format("Test %s time of completion - %d ms%n", description.getMethodName(), time));
+        protected void finished(long nanos, Description description) {
+            log.info("Test {} time of completion - {}", description.getMethodName(), TimeUnit.NANOSECONDS.toMillis(nanos));
+            testMessage.append(String.format("%n%-25s %8d", description.getMethodName(), TimeUnit.NANOSECONDS.toMillis(nanos)));
         }
     };
 
-
     @AfterClass
     public static void after() {
-        System.out.println();
-        System.out.println(testMessage);
-        System.out.println();
+        log.info("\n----------------------------------" +
+                 "\nTest name              Duration,ms" +
+                 "\n----------------------------------" +
+                    testMessage.toString() +
+                 "\n----------------------------------");
     }
 
     @Autowired
