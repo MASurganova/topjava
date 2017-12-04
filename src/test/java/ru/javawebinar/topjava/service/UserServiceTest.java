@@ -19,14 +19,6 @@ public abstract class UserServiceTest extends ServiceTest {
     @Autowired
     private UserService service;
 
-    @Autowired
-    private CacheManager cacheManager;
-
-    @Before
-    public void setUp() throws Exception {
-        cacheManager.getCache("users").clear();
-    }
-
     @Override
     @Test
     public void create() throws Exception {

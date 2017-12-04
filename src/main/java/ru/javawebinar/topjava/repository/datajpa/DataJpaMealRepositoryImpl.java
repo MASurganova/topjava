@@ -12,7 +12,7 @@ import java.util.List;
 @Repository
 public class DataJpaMealRepositoryImpl implements MealRepository {
 
-    private static final Sort SORT_DATE_TIME = new Sort(Sort.Direction.DESC, "dateTime");
+    private static final Sort SORT_DATE_TIME = new Sort(Sort.Direction.DESC, "date_time");
 
     @Autowired
     private CrudMealRepository crudRepository;
@@ -47,6 +47,6 @@ public class DataJpaMealRepositoryImpl implements MealRepository {
 
     @Override
     public List<Meal> getBetween(LocalDateTime startDate, LocalDateTime endDate, int userId) {
-        return crudRepository.findAll(userId, startDate, endDate);
+        return crudRepository.findAllByUserIdAndDateTimeBetween(userId, startDate, endDate, SORT_DATE_TIME);
     }
 }

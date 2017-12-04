@@ -1,9 +1,6 @@
 package ru.javawebinar.topjava.service;
 
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.rules.ExpectedException;
 import org.junit.rules.Stopwatch;
 import org.junit.runner.Description;
@@ -50,6 +47,14 @@ public abstract class ServiceTest {
 
     private static StringBuilder results = new StringBuilder();
 
+    @Autowired
+    private CacheManager cacheManager;
+
+    @Before
+    public void setUp() throws Exception {
+        cacheManager.getCache("users").clear();
+    }
+
     @Rule
     public ExpectedException thrown = ExpectedException.none();
 
@@ -76,6 +81,7 @@ public abstract class ServiceTest {
                 "\n---------------------------------" +
                 results +
                 "\n---------------------------------");
+        results = new StringBuilder();
     }
 
     @Test
