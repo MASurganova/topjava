@@ -1,5 +1,7 @@
 package ru.javawebinar.topjava.repository.datajpa;
 
+
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -14,15 +16,12 @@ import java.util.Optional;
 public interface CrudMealRepository extends JpaRepository<Meal, Integer> {
 
     @Modifying
-    @Query("SELECT m FROM Meal m WHERE m.user.id=:userId ORDER BY m.dateTime DESC")
-    List<Meal> findAll(@Param("userId") int userId);
-
-
-    @Modifying
     @Query("SELECT m FROM Meal m WHERE m.user.id=:userId " +
             "AND m.dateTime BETWEEN :startDate AND :endDate ORDER BY m.dateTime DESC")
     List<Meal> findAll(@Param("userId") int userId, @Param("startDate")LocalDateTime starDate,
                        @Param("endDate")LocalDateTime endDate);
+
+    List<Meal> findAllByUserId(int userId, Sort sort);
 
     @Transactional
     @Modifying
@@ -32,6 +31,6 @@ public interface CrudMealRepository extends JpaRepository<Meal, Integer> {
     @Override
     Optional<Meal> findById(Integer integer);
 
-    @Override
+
     Meal save(Meal meal);
 }
