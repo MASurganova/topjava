@@ -43,12 +43,12 @@ import static ru.javawebinar.topjava.UserTestData.USER;
 @ActiveProfiles(resolver = ActiveDbProfileResolver.class)
 public abstract class ServiceTest {
 
-    private static final Logger log = getLogger("result");
+    protected static final Logger log = getLogger("result");
 
-    private static StringBuilder results = new StringBuilder();
+    protected static StringBuilder results = new StringBuilder();
 
     @Autowired
-    private CacheManager cacheManager;
+    protected CacheManager cacheManager;
 
     @Before
     public void setUp() throws Exception {

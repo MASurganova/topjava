@@ -1,5 +1,7 @@
 package ru.javawebinar.topjava.service;
 
+import org.springframework.context.annotation.Profile;
+import ru.javawebinar.topjava.Profiles;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
@@ -24,4 +26,7 @@ public interface MealService {
     Meal update(Meal meal, int userId) throws NotFoundException;
 
     Meal create(Meal meal, int userId);
+
+    @Profile(Profiles.DATAJPA)
+    Meal getWithUser(int id, int userId);
 }

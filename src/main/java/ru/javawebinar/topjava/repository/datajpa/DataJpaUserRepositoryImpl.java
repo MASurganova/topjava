@@ -1,11 +1,14 @@
 package ru.javawebinar.topjava.repository.datajpa;
 
+import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.UserRepository;
 
+import java.util.Collections;
 import java.util.List;
 
 @Repository
@@ -38,5 +41,11 @@ public class DataJpaUserRepositoryImpl implements UserRepository {
     @Override
     public List<User> getAll() {
         return crudRepository.findAll(SORT_NAME_EMAIL);
+    }
+
+    @Override
+    public User getWithMeals(int id) {
+        List<User> users = crudRepository.findAll(id);
+        return users == null || users.isEmpty() ? null : users.get(0);
     }
 }
