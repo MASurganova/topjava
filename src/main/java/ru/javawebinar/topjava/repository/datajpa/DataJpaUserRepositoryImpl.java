@@ -25,7 +25,7 @@ public class DataJpaUserRepositoryImpl implements UserRepository {
 
     @Override
     public boolean delete(int id) {
-        return crudRepository.delete(id) != 0;
+        return crudRepository.removeById(id) != 0;
     }
 
     @Override
@@ -45,7 +45,8 @@ public class DataJpaUserRepositoryImpl implements UserRepository {
 
     @Override
     public User getWithMeals(int id) {
-        List<User> users = crudRepository.findAll(id);
-        return users == null || users.isEmpty() ? null : users.get(0);
+//        List<User> users = crudRepository.findAll(id);
+//        return users == null || users.isEmpty() ? null : users.get(0);
+        return crudRepository.getById(id).orElse(null);
     }
 }
