@@ -42,7 +42,7 @@ import static ru.javawebinar.topjava.UserTestData.USER;
 @RunWith(SpringRunner.class)
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
 @ActiveProfiles(resolver = ActiveDbProfileResolver.class)
-public abstract class ServiceTest {
+public abstract class AbstractServiceTest {
 
     protected static final Logger log = getLogger("result");
 
@@ -64,7 +64,7 @@ public abstract class ServiceTest {
     public Stopwatch stopwatch = new Stopwatch() {
         @Override
         protected void finished(long nanos, Description description) {
-            String result = String.format("\n%-25s %7d", description.getMethodName(), TimeUnit.NANOSECONDS.toMillis(nanos));
+            String result = String.format("\n%-95s %7d", description.getDisplayName(), TimeUnit.NANOSECONDS.toMillis(nanos));
             results.append(result);
             log.info(result + " ms\n");
         }
@@ -77,12 +77,12 @@ public abstract class ServiceTest {
 
     @AfterClass
     public static void printResult() {
-        log.info("\n---------------------------------" +
-                "\nTest                 Duration, ms" +
-                "\n---------------------------------" +
+        log.info("\n-------------------------------------------------------------------------------------------------------" +
+                "\nTest                                                                                       Duration, ms" +
+                "\n-------------------------------------------------------------------------------------------------------" +
                 results +
-                "\n---------------------------------");
-        results = new StringBuilder();
+                "\n-------------------------------------------------------------------------------------------------------");
+        results.setLength(0);
     }
 
     @Test
