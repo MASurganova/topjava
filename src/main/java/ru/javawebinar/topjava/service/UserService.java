@@ -22,6 +22,5 @@ public interface UserService {
 
     List<User> getAll();
 
-    @Profile(Profiles.DATAJPA)
     User getWithMeals(int id);
 }

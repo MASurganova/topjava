@@ -64,8 +64,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Profile(Profiles.DATAJPA)
     public User getWithMeals (int id) {
-        return repository.getWithMeals(id);
+        return checkNotFoundWithId(repository.getWithMeals(id), id);
     }
 }

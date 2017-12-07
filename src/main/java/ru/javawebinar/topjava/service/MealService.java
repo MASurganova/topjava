@@ -27,6 +27,5 @@ public interface MealService {
 
     Meal create(Meal meal, int userId);
 
-    @Profile(Profiles.DATAJPA)
     Meal getWithUser(int id, int userId);
 }

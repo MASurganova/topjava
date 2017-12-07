@@ -1,5 +1,7 @@
-package ru.javawebinar.topjava.repository.jdbc.jdbsMealRepository;
+package ru.javawebinar.topjava.repository.jdbc;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -8,36 +10,63 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
+import ru.javawebinar.topjava.Profiles;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
 
 import javax.sql.DataSource;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
-public abstract class JdbcMealRepositoryImpl implements MealRepository {
+public abstract class JdbcMealRepositoryImpl<T> implements MealRepository {
 
     static final RowMapper<Meal> ROW_MAPPER = BeanPropertyRowMapper.newInstance(Meal.class);
 
-    final JdbcTemplate jdbcTemplate;
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
-    private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+    @Autowired
+    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-    private final SimpleJdbcInsert insertMeal;
+    private SimpleJdbcInsert insertMeal;
 
-    public JdbcMealRepositoryImpl(DataSource dataSource, JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
+    @Autowired
+    private void setDataSource(DataSource dataSource) {
         this.insertMeal = new SimpleJdbcInsert(dataSource)
                 .withTableName("meals")
                 .usingGeneratedKeyColumns("id");
+    }
 
-        this.jdbcTemplate = jdbcTemplate;
-        this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
+    protected abstract T getDateTime(LocalDateTime dateTime);
+
+    @Repository
+    @Profile(Profiles.HSQL_DB)
+    public static class JdbcMealRepositoryForHsqldb extends JdbcMealRepositoryImpl<Timestamp>{
+        @Override
+        protected Timestamp getDateTime(LocalDateTime dateTime) {
+            return Timestamp.valueOf(dateTime);
+        }
+    }
+
+    @Repository
+    @Profile(Profiles.POSTGRES_DB)
+    public static class JdbcMealRepositoryForPostgres extends JdbcMealRepositoryImpl<LocalDateTime>{
+        @Override
+        protected LocalDateTime getDateTime(LocalDateTime dateTime) {
+            return dateTime;
+        }
     }
 
     @Override
     public Meal save(Meal meal, int userId) {
-        MapSqlParameterSource map = getMap(meal, userId);
+        MapSqlParameterSource map = new MapSqlParameterSource()
+                .addValue("id", meal.getId())
+                .addValue("description", meal.getDescription())
+                .addValue("calories", meal.getCalories())
+                .addValue("date_time", getDateTime(meal.getDateTime()))
+                .addValue("user_id", userId);;
 
         if (meal.isNew()) {
             Number newId = insertMeal.executeAndReturnKey(map);
@@ -53,8 +82,6 @@ public abstract class JdbcMealRepositoryImpl implements MealRepository {
         }
         return meal;
     }
-
-    abstract MapSqlParameterSource getMap(Meal meal, int userId);
 
     @Override
     public boolean delete(int id, int userId) {
@@ -74,6 +101,9 @@ public abstract class JdbcMealRepositoryImpl implements MealRepository {
                 "SELECT * FROM meals WHERE user_id=? ORDER BY date_time DESC", ROW_MAPPER, userId);
     }
 
-    @Override
-    public abstract List<Meal> getBetween(LocalDateTime startDate, LocalDateTime endDate, int userId);
+    public List<Meal> getBetween(LocalDateTime startDate, LocalDateTime endDate, int userId) {
+        return jdbcTemplate.query(
+                "SELECT * FROM meals WHERE user_id=?  AND date_time BETWEEN  ? AND ? ORDER BY date_time DESC",
+                ROW_MAPPER, userId, getDateTime(startDate), Timestamp.valueOf(endDate));
+    }
 }

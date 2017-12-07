@@ -58,8 +58,7 @@ public class MealServiceImpl implements MealService {
     }
 
     @Override
-    @Profile(Profiles.DATAJPA)
     public Meal getWithUser (int id, int userId) {
-        return repository.getWithUser(id, userId);
+        return checkNotFoundWithId(repository.getWithUser(id, userId), id);
     }
 }
