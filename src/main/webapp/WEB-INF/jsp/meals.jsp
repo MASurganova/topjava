@@ -5,7 +5,7 @@
 <html>
 <head>
     <title>Calories management</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="resources/css/style.css">
 </head>
 <body>
 <section>
