@@ -19,12 +19,7 @@ import static ru.javawebinar.topjava.util.DateTimeUtil.parseLocalDate;
 import static ru.javawebinar.topjava.util.DateTimeUtil.parseLocalTime;
 
 @Controller
-public class MealController extends MealRestController {
-
-    @Autowired
-    public MealController(MealService service) {
-        super(service);
-    }
+public class JspMealController extends AbstractMealController {
 
     @GetMapping("/meals")
     public String meals(Model model) {
