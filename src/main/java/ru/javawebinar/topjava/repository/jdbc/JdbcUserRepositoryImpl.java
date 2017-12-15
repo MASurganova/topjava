@@ -1,7 +1,6 @@
 package ru.javawebinar.topjava.repository.jdbc;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -10,8 +9,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.DefaultTransactionDefinition;
+import org.springframework.transaction.annotation.Transactional;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.UserRepository;
 
@@ -30,9 +28,6 @@ public class JdbcUserRepositoryImpl implements UserRepository {
     private final SimpleJdbcInsert insertUser;
 
     @Autowired
-    private DataSourceTransactionManager txMgr;
-
-    @Autowired
     public JdbcUserRepositoryImpl(DataSource dataSource, JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
         this.insertUser = new SimpleJdbcInsert(dataSource)
                 .withTableName("users")
@@ -42,37 +37,26 @@ public class JdbcUserRepositoryImpl implements UserRepository {
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
     }
 
+    @Transactional
     @Override
     public User save(User user) {
         BeanPropertySqlParameterSource parameterSource = new BeanPropertySqlParameterSource(user);
-        TransactionStatus tx = txMgr.getTransaction(new DefaultTransactionDefinition());
-        int n = -1;
-        try {
-            if (user.isNew()) {
-                Number newKey = insertUser.executeAndReturnKey(parameterSource);
-                user.setId(newKey.intValue());
-            } else n = namedParameterJdbcTemplate.update(
+        if (user.isNew()) {
+            Number newKey = insertUser.executeAndReturnKey(parameterSource);
+            user.setId(newKey.intValue());
+        } else {
+            if (namedParameterJdbcTemplate.update(
                     "UPDATE users SET name=:name, email=:email, password=:password, " +
-                            "registered=:registered, enabled=:enabled, calories_per_day=:caloriesPerDay WHERE id=:id", parameterSource);
-            txMgr.commit(tx);
-        } catch (DataAccessException e) {
-            txMgr.rollback(tx);
-            throw  e;
+                            "registered=:registered, enabled=:enabled, calories_per_day=:caloriesPerDay WHERE id=:id", parameterSource)
+                    == 0) return null;
         }
-        return n == 0 ? null : user;
+        return user;
     }
 
+    @Transactional
     @Override
     public boolean delete(int id) {
-        TransactionStatus tx = txMgr.getTransaction(new DefaultTransactionDefinition());
-        try {
-            boolean done = jdbcTemplate.update("DELETE FROM users WHERE id=?", id) != 0;
-            txMgr.commit(tx);
-            return done;
-        } catch (DataAccessException e) {
-            txMgr.rollback(tx);
-            return false;
-        }
+        return jdbcTemplate.update("DELETE FROM users WHERE id=?", id) != 0;
     }
 
     @Override
