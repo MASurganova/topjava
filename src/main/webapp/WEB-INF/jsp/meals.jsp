@@ -54,8 +54,8 @@
                 </td>
                 <td>${meal.description}</td>
                 <td>${meal.calories}</td>
-                <td><a href="<c:url value='/meals/update/${meal.id}'/>">Update</a></td>
-                <td><a href="<c:url value='/meals/delete/${meal.id}'/>">Delete</a></td>
+                <td><a href="<c:url value='/meals/update?id=${meal.id}'/>">Update</a></td>
+                <td><a href="<c:url value='/meals/delete?id=${meal.id}'/>">Delete</a></td>
             </tr>
         </c:forEach>
     </table>

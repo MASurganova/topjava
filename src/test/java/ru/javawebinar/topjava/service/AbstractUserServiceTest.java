@@ -101,8 +101,7 @@ public abstract class AbstractUserServiceTest extends AbstractServiceTest {
 
     @Test
     public void testValidation() throws Exception {
-        Assume.assumeTrue(Arrays.asList(environment.getActiveProfiles()).contains(Profiles.JPA) ||
-                Arrays.asList(environment.getActiveProfiles()).contains(Profiles.DATAJPA));
+        Assume.assumeTrue(environment.acceptsProfiles(Profiles.DATAJPA, Profiles.JPA));
         validateRootCause(() -> service.create(new User(null, "  ", "mail@yandex.ru", "password", Role.ROLE_USER)), ConstraintViolationException.class);
         validateRootCause(() -> service.create(new User(null, "User", "  ", "password", Role.ROLE_USER)), ConstraintViolationException.class);
         validateRootCause(() -> service.create(new User(null, "User", "mail@yandex.ru", "  ", Role.ROLE_USER)), ConstraintViolationException.class);
