@@ -7,7 +7,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.javawebinar.topjava.model.User;
 
 import java.net.URI;
-import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -42,12 +41,8 @@ public class AdminRestController extends AbstractUserController {
     }
 
     @Override
-    public User create(User user) {
-        return super.create(user);
-    }
-
-    @Override
-    public void delete(int id) {
+    @DeleteMapping(value = "/{id}")
+    public void delete(@PathVariable("id") int id) {
         super.delete(id);
     }
 
