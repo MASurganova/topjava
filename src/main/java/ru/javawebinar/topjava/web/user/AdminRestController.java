@@ -47,7 +47,8 @@ public class AdminRestController extends AbstractUserController {
     }
 
     @Override
-    public void delete(int id) {
+    @DeleteMapping(value= "/{id}")
+    public void delete(@PathVariable("id") int id) {
         super.delete(id);
     }
 
