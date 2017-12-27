@@ -12,7 +12,11 @@ import java.util.Locale;
 public class DateFormatter implements Formatter<LocalDate> {
     @Override
     public LocalDate parse(String s, Locale locale) throws ParseException {
-        return LocalDate.parse(s, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        LocalDate date = null;
+        try {
+            date = LocalDate.parse(s, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        } catch (Exception ignore) {}
+        return date;
     }
 
     @Override

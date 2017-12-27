@@ -13,7 +13,11 @@ import java.util.Locale;
 public class TimeFormatter implements Formatter<LocalTime> {
     @Override
     public LocalTime parse(String s, Locale locale) throws ParseException {
-        return LocalTime.parse(s, DateTimeFormatter.ofPattern("HH:mm"));
+        LocalTime time = null;
+        try {
+            time = LocalTime.parse(s, DateTimeFormatter.ofPattern("HH:mm"));
+        } catch (Exception ignore) {}
+        return time;
     }
 
     @Override
