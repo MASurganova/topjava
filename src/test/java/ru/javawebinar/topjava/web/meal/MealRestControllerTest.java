@@ -88,7 +88,7 @@ public class MealRestControllerTest extends AbstractControllerTest {
     @Test
     public void testGetBetweenAll() throws Exception {
         mockMvc.perform(get(REST_URL + "filter?startDate=" + "&startTime="
-                + "&endDate=" + "&endTime="))
+                +"&endTime="))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(TestUtil.contentJson(MealsUtil.getWithExceeded(MEALS, USER.getCaloriesPerDay())));
