@@ -6,14 +6,18 @@ import org.springframework.test.web.servlet.ResultActions;
 import ru.javawebinar.topjava.AuthorizedUser;
 import ru.javawebinar.topjava.TestUtil;
 import ru.javawebinar.topjava.model.Meal;
+import ru.javawebinar.topjava.util.MealsUtil;
 import ru.javawebinar.topjava.web.AbstractControllerTest;
 import ru.javawebinar.topjava.web.json.JsonUtil;
+
+import java.util.Arrays;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.javawebinar.topjava.MealTestData.*;
+import static ru.javawebinar.topjava.UserTestData.USER;
 
 
 public class MealRestControllerTest extends AbstractControllerTest {
@@ -25,7 +29,7 @@ public class MealRestControllerTest extends AbstractControllerTest {
         TestUtil.print(mockMvc.perform(get(REST_URL))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(contentJson(MEALS)));
+                .andExpect(TestUtil.contentJson(MealsUtil.getWithExceeded(MEALS, USER.getCaloriesPerDay()))));
     }
 
     @Test
@@ -35,7 +39,7 @@ public class MealRestControllerTest extends AbstractControllerTest {
                 .andDo(print())
                 // https://jira.spring.io/browse/SPR-14472
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(contentJson(MEAL1));
+                .andExpect(TestUtil.contentJson(MEAL1));
     }
 
     @Test
@@ -74,10 +78,20 @@ public class MealRestControllerTest extends AbstractControllerTest {
 
     @Test
     public void testGetBetween() throws Exception {
-        mockMvc.perform(get(REST_URL + "filter?startDate=" + "&startTime=08:15"
+        mockMvc.perform(get(REST_URL + "filter?startDate=2015-05-30" + "&startTime=08:15"
                 + "&endDate=2015-05-30" + "&endTime=15:15"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(contentJson(MEAL2, MEAL1));
+                .andExpect(TestUtil.contentJson(MealsUtil.getWithExceeded(Arrays.asList(MEAL2, MEAL1), USER.getCaloriesPerDay())));
+    }
+
+    @Test
+    public void testGetBetweenAll() throws Exception {
+        mockMvc.perform(get(REST_URL + "filter?startDate=" + "&startTime="
+                + "&endDate=" + "&endTime="))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(TestUtil.contentJson(MealsUtil.getWithExceeded(MEALS, USER.getCaloriesPerDay())));
     }
 }
+

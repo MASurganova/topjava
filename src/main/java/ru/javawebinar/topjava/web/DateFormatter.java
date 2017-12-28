@@ -1,4 +1,4 @@
-package ru.javawebinar.topjava.util;
+package ru.javawebinar.topjava.web;
 
 import org.springframework.format.Formatter;
 import org.springframework.stereotype.Component;
@@ -8,19 +8,17 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
+import static ru.javawebinar.topjava.util.DateTimeUtil.parseLocalDate;
+
 @Component
 public class DateFormatter implements Formatter<LocalDate> {
     @Override
     public LocalDate parse(String s, Locale locale) throws ParseException {
-        LocalDate date = null;
-        try {
-            date = LocalDate.parse(s, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        } catch (Exception ignore) {}
-        return date;
+        return parseLocalDate(s);
     }
 
     @Override
     public String print(LocalDate localDate, Locale locale) {
-        return localDate.toString();
+        return localDate.format(DateTimeFormatter.ISO_DATE);
     }
 }

@@ -7,8 +7,8 @@
 
     <bean class="ru.javawebinar.topjava.web.json.JacksonObjectMapper" id="objectMapper" factory-method="getMapper"/>
 
-    <bean class="ru.javawebinar.topjava.util.DateFormatter" id="dateFormatter"/>
-    <bean class="ru.javawebinar.topjava.util.TimeFormatter" id="timeFormatter"/>
+    <bean class="ru.javawebinar.topjava.web.DateFormatter" id="dateFormatter"/>
+    <bean class="ru.javawebinar.topjava.web.TimeFormatter" id="timeFormatter"/>
 
 
     <bean id="conversionService"
