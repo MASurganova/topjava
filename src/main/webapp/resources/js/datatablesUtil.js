@@ -32,8 +32,18 @@ function deleteRow(id) {
     });
 }
 
-function updateTable() {
-    $.get(ajaxUrl, function (data) {
+function filterMeals(data) {
+    $.ajax({
+        url: ajaxUrl + "filter",
+        type: "POST",
+        success: function (data) {
+            datatableApi.clear().rows.add(data).draw();
+        }
+    });
+}
+
+function updateTableByData(data) {
+    $.get(ajaxUrl, function () {
         datatableApi.clear().rows.add(data).draw();
     });
 }

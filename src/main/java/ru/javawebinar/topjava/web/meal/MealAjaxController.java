@@ -11,7 +11,9 @@ import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.to.MealWithExceed;
 import ru.javawebinar.topjava.web.user.AbstractUserController;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 @RestController
@@ -41,4 +43,14 @@ public class MealAjaxController extends AbstractMealController {
             super.create(meal);
         }
     }
+
+    @Override
+    @PostMapping(value = "/filter", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<MealWithExceed> getBetween(@RequestParam(value = "startDate", required = false) LocalDate startDate,
+                                           @RequestParam(value = "startTime", required = false) LocalTime startTime,
+                                           @RequestParam(value = "endDate", required = false) LocalDate  endDate,
+                                           @RequestParam(value = "endTime", required = false) LocalTime endTime) {
+        return super.getBetween(startDate, startTime, endDate,endTime);
+    }
+
 }

@@ -14,30 +14,48 @@
     <div class="container">
         <h3><spring:message code="meal.title"/></h3>
         <br/>
+
+
+        <form class="form-horizontal" id="filter">
+
+            <div class="form-group">
+                <label for="startDate" class="control-label col-xs-3"><spring:message code="meal.startDate"/></label>
+
+                <div class="col-xs-9">
+                    <input type="date" class="form-control" id="startDate" name="startDate">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="endDate" class="control-label col-xs-3"><spring:message code="meal.endDate"/></label>
+
+                <div class="col-xs-9">
+                    <input type="date" class="form-control" id="endDate" name="endDate">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="startTime" class="control-label col-xs-3"><spring:message code="meal.startTime"/></label>
+
+                <div class="col-xs-9">
+                    <input type="time" class="form-control" id="startTime" name="startTime">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="endTime" class="control-label col-xs-3"><spring:message code="meal.endTime"/></label>
+
+                <div class="col-xs-9">
+                    <input type="time" class="form-control" id="endTime" name="endTime">
+                </div>
+            </div>
+        </form>
+
+        <a class="btn btn-primary" onclick="updateTable()">
+           <span class="glyphicon glyphicon-filter" aria-hidden="true"></span>
+        </a>
+
         <a class="btn btn-primary" onclick="add()">
             <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
             <spring:message code="common.add"/>
         </a>
-
-    <%--<form method="post" action="meals/filter">--%>
-        <%--<dl>--%>
-            <%--<dt><spring:message code="meal.startDate"/>:</dt>--%>
-            <%--<dd><input type="date" name="startDate" value="${param.startDate}"></dd>--%>
-        <%--</dl>--%>
-        <%--<dl>--%>
-            <%--<dt><spring:message code="meal.endDate"/>:</dt>--%>
-            <%--<dd><input type="date" name="endDate" value="${param.endDate}"></dd>--%>
-        <%--</dl>--%>
-        <%--<dl>--%>
-            <%--<dt><spring:message code="meal.startTime"/>:</dt>--%>
-            <%--<dd><input type="time" name="startTime" value="${param.startTime}"></dd>--%>
-        <%--</dl>--%>
-        <%--<dl>--%>
-            <%--<dt><spring:message code="meal.endTime"/>:</dt>--%>
-            <%--<dd><input type="time" name="endTime" value="${param.endTime}"></dd>--%>
-        <%--</dl>--%>
-        <%--<button type="submit"><spring:message code="meal.filter"/></button>--%>
-    <%--</form>--%>
 
         <table class="table table-striped display" id="datatable">
             <thead>

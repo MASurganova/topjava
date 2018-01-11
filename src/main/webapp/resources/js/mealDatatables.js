@@ -34,3 +34,13 @@ $(function () {
     });
     makeEditable();
 });
+
+function updateTable() {
+    $.ajax({
+        type: "POST",
+        url: ajaxUrl + "filter",
+        data: $("#filter").serialize(),
+        success: updateTableByData
+    });
+
+}
