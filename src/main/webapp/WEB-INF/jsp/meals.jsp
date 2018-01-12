@@ -122,7 +122,7 @@
                         <label for="calories" class="control-label col-xs-3"><spring:message code="meal.calories"/></label>
 
                         <div class="col-xs-9">
-                            <input type="number" class="form-control" id="calories" name="calories" placeholder="<spring:message code="meal.calories"/>">
+                            <input type="number" class="form-control" id="calories" name="calories" placeholder="1000">
                         </div>
                     </div>
 
