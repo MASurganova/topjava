@@ -55,6 +55,9 @@
                         <a class="btn btn-primary" onclick="updateTable()">
                            <span class="glyphicon glyphicon-filter" aria-hidden="true"></span>
                         </a>
+                        <a class="btn btn-primary" onclick="clearFilter()">
+                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                        </a>
                     </div>
                 </div>
             </div>

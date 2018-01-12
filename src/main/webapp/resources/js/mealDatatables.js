@@ -42,5 +42,9 @@ function updateTable() {
         data: $("#filter").serialize(),
         success: updateTableByData
     });
+}
 
+function clearFilter() {
+    $("#filter")[0].reset();
+    $.get(ajaxUrl, updateTableByData);
 }
