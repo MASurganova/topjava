@@ -1,12 +1,4 @@
 function makeEditable() {
-    $(".delete").click(function () {
-        deleteRow($(this).attr("id"));
-    });
-
-    $("#detailsForm").submit(function () {
-        save();
-        return false;
-    });
 
     $(document).ajaxError(function (event, jqXHR, options, jsExc) {
         failNoty(jqXHR);
@@ -28,16 +20,6 @@ function deleteRow(id) {
         success: function () {
             updateTable();
             successNoty("Deleted");
-        }
-    });
-}
-
-function filterMeals(data) {
-    $.ajax({
-        url: ajaxUrl + "filter",
-        type: "POST",
-        success: function (data) {
-            datatableApi.clear().rows.add(data).draw();
         }
     });
 }

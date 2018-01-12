@@ -15,43 +15,50 @@
         <h3><spring:message code="meal.title"/></h3>
         <br/>
 
+        <div class="row">
+            <div class="col-sm-7">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <form class="form-horizontal" id="filter">
 
-        <form class="form-horizontal" id="filter">
+                            <div class="form-group">
+                                <label for="startDate" class="control-label col-xs-3"><spring:message code="meal.startDate"/></label>
 
-            <div class="form-group">
-                <label for="startDate" class="control-label col-xs-3"><spring:message code="meal.startDate"/></label>
+                                <div class="col-xs-9">
+                                    <input type="date" class="form-control" id="startDate" name="startDate">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="endDate" class="control-label col-xs-3"><spring:message code="meal.endDate"/></label>
 
-                <div class="col-xs-9">
-                    <input type="date" class="form-control" id="startDate" name="startDate">
+                                <div class="col-xs-9">
+                                    <input type="date" class="form-control" id="endDate" name="endDate">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="startTime" class="control-label col-xs-3"><spring:message code="meal.startTime"/></label>
+
+                                <div class="col-xs-9">
+                                    <input type="time" class="form-control" id="startTime" name="startTime">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="endTime" class="control-label col-xs-3"><spring:message code="meal.endTime"/></label>
+
+                                <div class="col-xs-9">
+                                    <input type="time" class="form-control" id="endTime" name="endTime">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="panel-footer text-right">
+                        <a class="btn btn-primary" onclick="updateTable()">
+                           <span class="glyphicon glyphicon-filter" aria-hidden="true"></span>
+                        </a>
+                    </div>
                 </div>
             </div>
-            <div class="form-group">
-                <label for="endDate" class="control-label col-xs-3"><spring:message code="meal.endDate"/></label>
-
-                <div class="col-xs-9">
-                    <input type="date" class="form-control" id="endDate" name="endDate">
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="startTime" class="control-label col-xs-3"><spring:message code="meal.startTime"/></label>
-
-                <div class="col-xs-9">
-                    <input type="time" class="form-control" id="startTime" name="startTime">
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="endTime" class="control-label col-xs-3"><spring:message code="meal.endTime"/></label>
-
-                <div class="col-xs-9">
-                    <input type="time" class="form-control" id="endTime" name="endTime">
-                </div>
-            </div>
-        </form>
-
-        <a class="btn btn-primary" onclick="updateTable()">
-           <span class="glyphicon glyphicon-filter" aria-hidden="true"></span>
-        </a>
-
+        </div>
         <a class="btn btn-primary" onclick="add()">
             <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
             <spring:message code="common.add"/>
@@ -74,7 +81,7 @@
                     <td>${meal.description}</td>
                     <td>${meal.calories}</td>
                     <td><a><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a></td>
-                    <td><a class="delete" id="${meal.id}"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a></td>
+                    <td><a class="btn btn-primary" onclick="deleteRow(${meal.id})"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a></td>
                 </tr>
             </c:forEach>
         </table>
@@ -116,14 +123,11 @@
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <div class="col-xs-offset-3 col-xs-9">
-                            <button type="submit" class="btn btn-primary">
-                                <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
-                            </button>
-                        </div>
-                    </div>
                 </form>
+
+                <a class="btn btn-primary" onclick="save()">
+                    <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                </a>
             </div>
         </div>
     </div>
