@@ -93,3 +93,4 @@ function renderDeleteBtn(data, type, row) {
             "<span class='glyphicon glyphicon-remove' aria-hidden='true'></span></a>";
     }
 }
+

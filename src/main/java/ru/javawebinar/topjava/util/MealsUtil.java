@@ -42,7 +42,7 @@ public class MealsUtil {
     }
 
     public static Meal createNewFromTo(MealTo mealTo) {
-        return new Meal(mealTo.getId(), LocalDateTime.parse(mealTo.getDateTime()), mealTo.getDescription(), mealTo.getCalories());
+        return new Meal(mealTo.getId(), LocalDateTime.parse(mealTo.getDateTime().replace(" ", "T")), mealTo.getDescription(), mealTo.getCalories());
     }
 
     /*

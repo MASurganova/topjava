@@ -62,4 +62,9 @@ $(function () {
         },
         "initComplete": makeEditable
     });
+
+    $('#dateTime').datetimepicker({
+        format: 'Y-m-d H:i'
+    });
 });
+
