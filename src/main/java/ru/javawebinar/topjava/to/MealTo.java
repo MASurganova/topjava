@@ -5,9 +5,10 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
-public class MealTo extends BaseTo {
+public class MealTo extends BaseTo implements Serializable {
     @NotBlank
     private String dateTime;
 
