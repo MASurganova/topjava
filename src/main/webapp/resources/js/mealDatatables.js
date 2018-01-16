@@ -63,8 +63,36 @@ $(function () {
         "initComplete": makeEditable
     });
 
+    var startDate = $('#startDate');
+    var endDate = $('#endDate');
+
     $('#dateTime').datetimepicker({
         format: 'Y-m-d H:i'
+    });
+
+    $('#startTime, #endTime').datetimepicker({
+        datepicker: false,
+        format: 'H:i'
+    });
+
+   startDate.datetimepicker({
+        timepicker: false,
+        format: 'Y-m-d',
+        formatdate: 'Y-m-d',
+        onShow: function (ct) {
+            this.setOptions({
+             maxDate: endDate.val()? endDate.val() : false})
+        }
+    });
+
+    endDate.datetimepicker({
+        timepicker: false,
+        format: 'Y-m-d',
+        formatdate: 'Y-m-d',
+        onShow: function (ct) {
+            this.setOptions({
+            minDate: startDate.val()? startDate.val() : false})
+        }
     });
 });
 
